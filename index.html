@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ISS Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet.css">
+  <link rel="icon" type="image/png" href="ISS-Fav.png">
+</head>
+<body>
+  <header>
+    <h1>International Space Station Tracker</h1>
+    <p>Real-time location and details about the ISS</p>
+  </header>
+  <main>
+    <div id="map-container">
+      <div id="map"></div>
+    </div>
+    <section class="details">
+      <h2>ISS Details</h2>
+      <p><strong>Latitude:</strong> <span id="latitude">Loading...</span></p>
+      <p><strong>Longitude:</strong> <span id="longitude">Loading...</span></p>
+    </section>
+    <section class="additional-features">
+      <h2>Fun Features</h2>
+      <button id="astronauts-button">Who's on the ISS?</button>
+      <div id="astronauts-list" class="hidden"></div>
+    </section>
+  </main>
+  <footer>
+    <p>Powered by Open Notify API</p>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
