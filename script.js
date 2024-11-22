@@ -1,5 +1,5 @@
 const apiUrl = "https://api.allorigins.win/get?url=http://api.open-notify.org/iss-now.json";
-const astronautsApi = "https://api.allorigins.win/get?url=http://api.open-notify.org/astros.json";
+const astronautsApi = "https://api.allorigins.win/get?url=" + encodeURIComponent("http://api.open-notify.org/astros.json");
 
 const map = L.map("map").setView([0, 0], 2);
 const issIcon = L.icon({
@@ -38,6 +38,11 @@ async function fetchAstronauts() {
   try {
     const response = await fetch(astronautsApi);
     const data = await response.json();
+
+    if (!data.contents) {
+      throw new Error("No contents returned from the API");
+    }
+
     const astronautData = JSON.parse(data.contents);
 
     astronautData.people.forEach(person => {
@@ -49,8 +54,10 @@ async function fetchAstronauts() {
     listContainer.classList.remove("hidden");
   } catch (error) {
     console.error("Failed to fetch astronauts:", error);
+    listContainer.textContent = "Failed to load astronaut data.";
   }
 }
+
 
 // Event listeners
 document.getElementById("astronauts-button").addEventListener("click", fetchAstronauts);
