@@ -1,18 +1,12 @@
 const apiUrl = "https://api.allorigins.win/get?url=http://api.open-notify.org/iss-now.json";
-fetch(apiUrl)
-  .then(response => response.json())
-  .then(data => {
-    const issData = JSON.parse(data.contents);
-    console.log(issData); // Process ISS data
-  })
-  .catch(error => console.error("Failed to fetch ISS data:", error));
+const astronautsApi = "https://api.allorigins.win/get?url=http://api.open-notify.org/astros.json";
+
 const map = L.map("map").setView([0, 0], 2);
 const issIcon = L.icon({
   iconUrl: "https://upload.wikimedia.org/wikipedia/commons/d/d0/International_Space_Station.svg",
   iconSize: [50, 32],
   iconAnchor: [25, 16],
 });
-
 let marker = L.marker([0, 0], { icon: issIcon }).addTo(map);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -24,7 +18,8 @@ async function updateISS() {
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
-    const { latitude, longitude } = data.iss_position;
+    const issData = JSON.parse(data.contents);
+    const { latitude, longitude } = issData.iss_position;
 
     document.getElementById("latitude").textContent = latitude;
     document.getElementById("longitude").textContent = longitude;
@@ -38,14 +33,14 @@ async function updateISS() {
 
 // Fetch astronaut data
 async function fetchAstronauts() {
-  const astronautsApi = "http://api.open-notify.org/astros.json";
   const listContainer = document.getElementById("astronauts-list");
   listContainer.innerHTML = "";
   try {
     const response = await fetch(astronautsApi);
     const data = await response.json();
+    const astronautData = JSON.parse(data.contents);
 
-    data.people.forEach(person => {
+    astronautData.people.forEach(person => {
       const astronautItem = document.createElement("p");
       astronautItem.textContent = `${person.name} (${person.craft})`;
       listContainer.appendChild(astronautItem);
