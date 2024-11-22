@@ -1,4 +1,11 @@
-const apiUrl = "http://api.open-notify.org/iss-now.json";
+const apiUrl = "https://api.allorigins.win/get?url=http://api.open-notify.org/iss-now.json";
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    const issData = JSON.parse(data.contents);
+    console.log(issData); // Process ISS data
+  })
+  .catch(error => console.error("Failed to fetch ISS data:", error));
 const map = L.map("map").setView([0, 0], 2);
 const issIcon = L.icon({
   iconUrl: "https://upload.wikimedia.org/wikipedia/commons/d/d0/International_Space_Station.svg",
