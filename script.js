@@ -21,16 +21,10 @@ async function updateISS() {
 
     // Ensure contents exist and are valid JSON
     if (!data.contents) {
-      throw new Error("No contents property in the response.");
+      throw new Error("Contents property is missing or undefined.");
     }
 
-    let issData;
-    try {
-      issData = JSON.parse(data.contents);
-    } catch (parseError) {
-      throw new Error("Failed to parse contents as JSON.");
-    }
-
+    const issData = JSON.parse(data.contents);
     const { latitude, longitude } = issData.iss_position;
 
     document.getElementById("latitude").textContent = latitude;
@@ -42,6 +36,7 @@ async function updateISS() {
     console.error("Failed to fetch ISS data:", error.message);
   }
 }
+
 
 // Fetch astronaut data
 async function fetchAstronauts() {
