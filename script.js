@@ -18,7 +18,19 @@ async function updateISS() {
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
-    const issData = JSON.parse(data.contents);
+
+    // Ensure contents exist and are valid JSON
+    if (!data.contents) {
+      throw new Error("No contents property in the response.");
+    }
+
+    let issData;
+    try {
+      issData = JSON.parse(data.contents);
+    } catch (parseError) {
+      throw new Error("Failed to parse contents as JSON.");
+    }
+
     const { latitude, longitude } = issData.iss_position;
 
     document.getElementById("latitude").textContent = latitude;
@@ -27,7 +39,7 @@ async function updateISS() {
     marker.setLatLng([latitude, longitude]);
     map.setView([latitude, longitude], map.getZoom());
   } catch (error) {
-    console.error("Failed to fetch ISS data:", error);
+    console.error("Failed to fetch ISS data:", error.message);
   }
 }
 
@@ -40,10 +52,15 @@ async function fetchAstronauts() {
     const data = await response.json();
 
     if (!data.contents) {
-      throw new Error("No contents returned from the API");
+      throw new Error("No contents returned from the API.");
     }
 
-    const astronautData = JSON.parse(data.contents);
+    let astronautData;
+    try {
+      astronautData = JSON.parse(data.contents);
+    } catch (parseError) {
+      throw new Error("Failed to parse astronaut data as JSON.");
+    }
 
     astronautData.people.forEach(person => {
       const astronautItem = document.createElement("p");
@@ -53,11 +70,10 @@ async function fetchAstronauts() {
 
     listContainer.classList.remove("hidden");
   } catch (error) {
-    console.error("Failed to fetch astronauts:", error);
+    console.error("Failed to fetch astronauts:", error.message);
     listContainer.textContent = "Failed to load astronaut data.";
   }
 }
-
 
 // Event listeners
 document.getElementById("astronauts-button").addEventListener("click", fetchAstronauts);
